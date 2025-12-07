@@ -1,0 +1,211 @@
+{
+  "info": {
+    "name": "Construction Management App (fixed)",
+    "_postman_id": "82e7b1b3-9fa1-4f0e-bb9e-91a9b57e8a01",
+    "description": "Fixed: uses /api/* routes (Auth under /api/users, Projects under /api/projects, DPR under /api/projects/:id/dpr)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "AUTH",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"manager\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:4000/api/users/register",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "4000",
+              "path": ["api","users","register"]
+            }
+          }
+        },
+        {
+          "name": "Login User",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:4000/api/users/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "4000",
+              "path": ["api","users","login"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "PROJECTS",
+      "item": [
+        {
+          "name": "Create Project",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Building A\",\n  \"description\": \"New Apartment Project\",\n  \"start_date\": \"2025-01-10\",\n  \"end_date\": \"2025-12-30\",\n  \"status\": \"planned\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:4000/api/projects",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "4000",
+              "path": ["api","projects"]
+            }
+          }
+        },
+        {
+          "name": "Get All Projects",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "http://localhost:4000/api/projects",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "4000",
+              "path": ["api","projects"]
+            }
+          }
+        },
+        {
+          "name": "Get Project By ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "http://localhost:4000/api/projects/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "4000",
+              "path": ["api","projects","1"]
+            }
+          }
+        },
+        {
+          "name": "Update Project",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Building A Updated\",\n  \"status\": \"active\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:4000/api/projects/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "4000",
+              "path": ["api","projects","1"]
+            }
+          }
+        },
+        {
+          "name": "Delete Project",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "http://localhost:4000/api/projects/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "4000",
+              "path": ["api","projects","1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "DAILY REPORTS",
+      "item": [
+        {
+          "name": "Create DPR (project-level)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n \"date\": \"2025-01-20\",\n \"work_description\": \"Foundation Work Completed\",\n \"weather\": \"Sunny\",\n \"worker_count\": 15\n}"
+            },
+            "url": {
+              "raw": "http://localhost:4000/api/projects/1/dpr",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "4000",
+              "path": ["api","projects","1","dpr"]
+            }
+          }
+        },
+        {
+          "name": "Get DPRs For Project (project-level)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "http://localhost:4000/api/projects/1/dpr",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "4000",
+              "path": ["api","projects","1","dpr"]
+            }
+          }
+        },
+        {
+          "name": "Get All DPRs (global)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "http://localhost:4000/api/daily-reports",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "4000",
+              "path": ["api","daily-reports"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    { "key": "token", "value": "" }
+  ]
+}
