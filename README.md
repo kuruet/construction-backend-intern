@@ -192,15 +192,17 @@ Use Bearer Token (JWT) for protected routes
 Folder Structure
 
 src/
-├─ controllers/        # API controller functions
-├─ middlewares/        # Auth, RBAC, validation handler
-├─ models/             # Sequelize models
-├─ routes/             # Express routes
-├─ validators/         # Input validation rules
-├─ config/             # DB and other configuration
-├─ .env                # Environment variables (not committed)
-├─ .env.example        # Example environment variables
-├─ server.js           # Main entry point
+├─ controllers/     
+├─ middlewares/       
+├─ models/           
+├─ routes/             
+├─ validators/        
+├─ config/             
+├─ .env                
+├─ .env.example        
+├─ server.js           
+
+        
 
 Running the Server
 npm install
