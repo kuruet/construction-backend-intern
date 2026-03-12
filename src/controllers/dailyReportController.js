@@ -77,7 +77,7 @@ export const deleteDailyReport = async (req, res) => {
 };
 
 // ----------------------
-// NEW FUNCTION: Get all DPRs for a specific project
+// NEW FUNCTION: Get all DPRs for a specific projects
 // ----------------------
 export const getAllDailyReportsByProject = async (req, res) => {
   try {
