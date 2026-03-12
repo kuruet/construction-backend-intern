@@ -1,215 +1,505 @@
-🏗️ Construction Management App — Backend
+🏗️ Construction Management Backend API
 
-A REST API backend for managing construction projects, daily progress reports (DPRs), and users with role-based access control.
+A production-ready REST API backend for managing construction projects, users, and daily progress reports (DPRs).
+This service demonstrates clean backend architecture, secure authentication, relational database design, and role-based access control.
+
+The API powers core workflows such as:
+
+User authentication and authorization
+
+Project lifecycle management
+
+Daily construction progress reporting
+
+Role-based access to protected resources
+
+This project was developed as part of a Backend Developer Internship Selection Task.
 
 📚 Table of Contents
 
 Project Overview
 
+System Architecture
+
 Tech Stack
 
-Database
+Database Design
 
 Installation & Setup
 
 Environment Variables
 
-Database Schema
+Running the Server
+
+API Authentication Flow
+
+Role Based Access Control
 
 API Endpoints
 
-Validation & Error Handling
+Example API Requests
 
-Postman Collection
+Validation & Error Handling
 
 Folder Structure
 
-Running the Server
+Postman Collection
+
+SQL Schema
+
+Design Decisions
+
+Future Improvements
 
 🏗️ Project Overview
 
-This backend REST API supports core features of the Construction Management App:
+The Construction Management Backend API provides the server-side infrastructure for managing construction operations.
 
-👤 User registration & authentication
+Key capabilities include:
 
-🔑 Role-based access control (Admin, Manager, Worker)
+👤 User Management
 
-📝 Project management (create, read, update, delete)
+Register users
 
-📊 Daily Progress Reports (DPRs) linked to projects
+Authenticate users with JWT
 
-✅ Input validation & proper error handling
+Role-based authorization
 
-🗄️ Database relationships via MySQL and Sequelize ORM
+🏗️ Project Management
 
-Goal: Build a fully functional backend that can be tested via Postman or any REST client.
+Create projects
+
+Update project status
+
+List and filter projects
+
+Delete projects (admin only)
+
+📊 Daily Progress Reports (DPR)
+
+Workers and managers submit daily work updates
+
+DPRs are linked to both projects and users
+
+Reports can be queried by project or globally
+
+🔐 Secure Access Control
+
+The system supports three roles:
+
+Admin
+
+Manager
+
+Worker
+
+Access permissions are enforced using middleware-based role validation.
+
+🏛️ System Architecture
+
+The backend follows a layered architecture to ensure maintainability and scalability.
+
+Client (Postman / Frontend)
+        │
+        ▼
+      Routes
+        │
+        ▼
+    Controllers
+        │
+        ▼
+      Models
+        │
+        ▼
+   Sequelize ORM
+        │
+        ▼
+     MySQL Database
+     
+Layer Responsibilities
+
+Routes
+
+Define API endpoints
+
+Forward requests to controllers
+
+Controllers
+
+Implement application logic
+
+Handle request/response lifecycle
+
+Models
+
+Define database schema and relationships
+
+Middleware
+
+Authentication
+
+Role authorization
+
+Input validation
+
+Error handling
+
 
 🛠️ Tech Stack
 
-Language: Node.js (ES6, Express framework)
+| Component        | Technology            |
+| ---------------- | --------------------- |
+| Runtime          | Node.js               |
+| Framework        | Express.js            |
+| Database         | MySQL                 |
+| ORM              | Sequelize             |
+| Authentication   | JSON Web Tokens (JWT) |
+| Password Hashing | bcrypt                |
+| Validation       | express-validator     |
+| API Testing      | Postman               |
+| Version Control  | Git + GitHub          |
 
-Database: MySQL
 
-ORM: Sequelize
 
-Authentication: JWT (JSON Web Tokens)
+🗄️ Database Design
 
-Validation: express-validator
+The system uses a relational MySQL database with foreign key relationships.
 
-Version Control: Git & GitHub
+Entities
 
-💾 Database
+Users
 
-Database Used: MySQL
+Projects
 
-⚙️ Setup
+Daily Reports
 
-Install MySQL on your system
+Database Relationships
+Users (1) ────── (Many) Projects
+Users (1) ────── (Many) Daily Reports
+Projects (1) ─── (Many) Daily Reports
+Relationship Explanation
 
-Create a database: construction_app
+A user can create multiple projects
 
-Configure .env file with your database credentials
+A project can have many DPR entries
 
-Run the SQL schema provided or use sequelize.sync() to automatically create tables
+A DPR is created by a specific user
 
-Tables:
+📊 Database Schema
 
-users — stores user accounts and roles
 
-projects — stores project information
+Users Table
 
-daily_reports — stores DPRs linked to projects
+| Column        | Type                         | Key    | Default           | Description        |
+| ------------- | ---------------------------- | ------ | ----------------- | ------------------ |
+| id            | INT                          | PK     | AUTO_INCREMENT    | Unique user ID     |
+| name          | VARCHAR(255)                 |        |                   | Full name          |
+| email         | VARCHAR(255)                 | UNIQUE |                   | User email         |
+| password_hash | VARCHAR(255)                 |        |                   | Hashed password    |
+| role          | ENUM(admin, manager, worker) |        | worker            | User role          |
+| created_at    | DATETIME                     |        | CURRENT_TIMESTAMP | Creation timestamp |
+
+
+
+Projects Table
+
+| Column      | Type                             | Key           | Default           | Description         |
+| ----------- | -------------------------------- | ------------- | ----------------- | ------------------- |
+| id          | INT                              | PK            | AUTO_INCREMENT    | Project ID          |
+| name        | VARCHAR(255)                     |               |                   | Project name        |
+| description | TEXT                             |               | NULL              | Project description |
+| start_date  | DATETIME                         |               | NULL              | Start date          |
+| end_date    | DATETIME                         |               | NULL              | End date            |
+| status      | ENUM(planned, active, completed) |               | planned           | Project status      |
+| created_by  | INT                              | FK → users.id |                   | Project creator     |
+| created_at  | DATETIME                         |               | CURRENT_TIMESTAMP | Creation time       |
+
+
+Daily Reports Table
+
+| Column           | Type        | Key              | Default           | Description        |
+| ---------------- | ----------- | ---------------- | ----------------- | ------------------ |
+| id               | INT         | PK               | AUTO_INCREMENT    | Report ID          |
+| project_id       | INT         | FK → projects.id |                   | Associated project |
+| user_id          | INT         | FK → users.id    |                   | Report creator     |
+| date             | DATE        |                  |                   | Report date        |
+| work_description | TEXT        |                  |                   | Work completed     |
+| weather          | VARCHAR(50) |                  | NULL              | Weather conditions |
+| worker_count     | INT         |                  | 0                 | Number of workers  |
+| created_at       | TIMESTAMP   |                  | CURRENT_TIMESTAMP | Record creation    |
+
+
 
 💻 Installation & Setup
-Clone Repository
+1️⃣ Clone Repository
 git clone https://github.com/yourusername/construction-management-backend.git
 cd construction-management-backend
-
-Install Dependencies
+2️⃣ Install Dependencies
 npm install
+3️⃣ Setup MySQL Database
 
-Configure Environment Variables
+Create database:
 
-Create a .env file (or use .env.example as reference):
+CREATE DATABASE construction_app;
+4️⃣ Configure Environment Variables
+
+Create .env file:
+
 PORT=4000
 NODE_ENV=development
+
 DB_HOST=localhost
 DB_PORT=3306
 DB_USER=root
 DB_PASSWORD=yourpassword
 DB_NAME=construction_app
-JWT_SECRET=changeme
-JWT_EXPIRES_IN=7d
 DB_DIALECT=mysql
 
+JWT_SECRET=changeme
+JWT_EXPIRES_IN=7d
+5️⃣ Run Database Schema
 
-Start the Server
+Run the SQL script:
+
+sql/schema.sql
+
+Or allow Sequelize to create tables automatically.
+
+▶️ Running the Server
+
+Start development server:
+
 npm run dev
 
-🗂️ Database Schema
+Server will start at:
 
-Users Table
+http://localhost:4000
+🔐 Authentication Flow
 
-| Column        | Type                             | Key | Default           | Notes                 |
-| ------------- | -------------------------------- | --- | ----------------- | --------------------- |
-| id            | INT                              | PK  | AUTO_INCREMENT    | Primary key           |
-| name          | VARCHAR(255)                     |     |                   | Full name of user     |
-| email         | VARCHAR(255)                     | UNI |                   | Unique email          |
-| password_hash | VARCHAR(255)                     |     |                   | Hashed password       |
-| role          | ENUM('admin','manager','worker') |     | worker            | Role of the user      |
-| created_at    | DATETIME                         |     | CURRENT_TIMESTAMP | Account creation time |
+The API uses JWT based authentication.
 
-Project Table
+Login Process
 
-| Column      | Type                                 | Key | Default           | Notes                  |
-| ----------- | ------------------------------------ | --- | ----------------- | ---------------------- |
-| id          | INT                                  | PK  | AUTO_INCREMENT    | Primary key            |
-| name        | VARCHAR(255)                         |     |                   | Project name           |
-| description | TEXT                                 |     | NULL              | Project description    |
-| start_date  | DATETIME                             |     | NULL              | Project start date     |
-| end_date    | DATETIME                             |     | NULL              | Project end date       |
-| status      | ENUM('planned','active','completed') |     | planned           | Current project status |
-| created_by  | INT                                  | FK  |                   | References `users.id`  |
-| created_at  | DATETIME                             |     | CURRENT_TIMESTAMP | Record creation time   |
+1️⃣ User logs in with email and password
 
-Daily Reports Table 
+2️⃣ Password is verified using bcrypt
 
-| Column           | Type        | Key | Default           | Notes                      |
-| ---------------- | ----------- | --- | ----------------- | -------------------------- |
-| id               | INT         | PK  | AUTO_INCREMENT    | Primary key                |
-| project_id       | INT         | FK  |                   | References `projects.id`   |
-| user_id          | INT         | FK  |                   | References `users.id`      |
-| date             | DATE        |     |                   | Date of the report         |
-| work_description | TEXT        |     |                   | Description of work done   |
-| weather          | VARCHAR(50) |     | NULL              | Optional weather info      |
-| worker_count     | INT         |     | 0                 | Optional number of workers |
-| created_at       | TIMESTAMP   |     | CURRENT_TIMESTAMP | Record creation time       |
+3️⃣ Server generates a JWT token
+
+4️⃣ Client stores token
+
+5️⃣ Token must be sent in every protected request
+
+Example request header:
+
+Authorization: Bearer <JWT_TOKEN>
+
+JWT ensures stateless authentication and secure API access.
+
+🛡️ Role Based Access Control
+
+The system supports three roles:
+
+admin
+manager
+worker
+
+
+Access Permissions
+
+Action	Admin	Manager	Worker
+Create Project	✅	✅	❌
+Update Project	✅	✅	❌
+Delete Project	✅	❌	❌
+Create DPR	✅	✅	✅
+View Projects	✅	✅	✅
+
+Role validation is implemented using authorization middleware.
 
 🚀 API Endpoints
+
 Authentication
-| Method | URL                 | Access | Description         |
-| ------ | ------------------- | ------ | ------------------- |
-| POST   | /api/users/register | Public | Register a new user |
-| POST   | /api/users/login    | Public | Login & receive JWT |
 
-Projects 
-
-| Method | URL               | Access        | Description          |
-| ------ | ----------------- | ------------- | -------------------- |
-| POST   | /api/projects     | Admin/Manager | Create a new project |
-| GET    | /api/projects     | All logged in | List all projects    |
-| GET    | /api/projects/:id | All logged in | Get project by ID    |
-| PUT    | /api/projects/:id | Admin/Manager | Update project       |
-| DELETE | /api/projects/:id | Admin only    | Delete project       |
-
-Daily progress Reports
-
-| Method | URL                    | Access               | Description                 |
-| ------ | ---------------------- | -------------------- | --------------------------- |
-| POST   | /api/projects/:id/dpr  | Worker/Manager/Admin | Create DPR for a project    |
-| GET    | /api/projects/:id/dpr  | Worker/Manager/Admin | List all DPRs for a project |
-| GET    | /api/daily-reports     | Worker/Manager/Admin | List all DPRs globally      |
-| PUT    | /api/daily-reports/:id | Manager/Admin        | Update DPR                  |
-| DELETE | /api/daily-reports/:id | Admin only           | Delete DPR                  |
+| Method | Endpoint            | Access | Description           |
+| ------ | ------------------- | ------ | --------------------- |
+| POST   | /api/users/register | Public | Register user         |
+| POST   | /api/users/login    | Public | Login and receive JWT |
 
 
+Projects
+
+| Method | Endpoint          | Access        | Description         |
+| ------ | ----------------- | ------------- | ------------------- |
+| POST   | /api/projects     | Admin/Manager | Create project      |
+| GET    | /api/projects     | Authenticated | List projects       |
+| GET    | /api/projects/:id | Authenticated | Get project details |
+| PUT    | /api/projects/:id | Admin/Manager | Update project      |
+| DELETE | /api/projects/:id | Admin         | Delete project      |
+
+
+
+Daily Progress Reports
+
+| Method | Endpoint               | Access        | Description       |
+| ------ | ---------------------- | ------------- | ----------------- |
+| POST   | /api/projects/:id/dpr  | Authenticated | Create DPR        |
+| GET    | /api/projects/:id/dpr  | Authenticated | List project DPRs |
+| GET    | /api/daily-reports     | Authenticated | List all DPRs     |
+| PUT    | /api/daily-reports/:id | Manager/Admin | Update DPR        |
+| DELETE | /api/daily-reports/:id | Admin         | Delete DPR        |
+
+
+📬 Example API Requests
+Register User
+POST /api/users/register
+
+Request body:
+
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "password123"
+}
+
+Response:
+
+{
+  "message": "User registered successfully",
+  "userId": 1
+}
+Login
+POST /api/users/login
+{
+  "email": "john@example.com",
+  "password": "password123"
+}
+
+Response:
+
+{
+  "token": "JWT_TOKEN",
+  "user": {
+    "id": 1,
+    "name": "John Doe",
+    "role": "manager"
+  }
+}
 ✅ Validation & Error Handling
 
-All inputs validated using express-validator
+The API includes comprehensive validation and error handling.
 
-Correct HTTP status codes returned: 200, 201, 400, 401, 403, 404, 500
+Validation
 
-Errors return descriptive messages for easy debugging
+Implemented using express-validator
+
+Ensures required fields and correct data types
+
+Example validations:
+
+Email format
+
+Password length
+
+Date formats
+
+Worker count as integer
+
+HTTP Status Codes
+Code	Meaning
+200	Success
+201	Resource Created
+400	Bad Request
+401	Unauthorized
+403	Forbidden
+404	Not Found
+500	Server Error
+📁 Folder Structure
+src
+ ├── config
+ │    database.js
+ │
+ ├── controllers
+ │    auth.controller.js
+ │    project.controller.js
+ │    dpr.controller.js
+ │
+ ├── models
+ │    user.model.js
+ │    project.model.js
+ │    dailyReport.model.js
+ │
+ ├── routes
+ │    auth.routes.js
+ │    project.routes.js
+ │
+ ├── middlewares
+ │    auth.middleware.js
+ │    role.middleware.js
+ │    error.middleware.js
+ │
+ ├── validators
+ │
+ └── server.js
+
+This structure follows separation of concerns and scalable backend architecture.
 
 📬 Postman Collection
 
-Import construction-app.postman_collection.json
+A Postman collection is included:
 
-All endpoints are tested and ready to use
+postman/construction-app.postman_collection.json
 
-Use Bearer Token (JWT) for protected routes
+Import into Postman to test all endpoints.
 
-Folder Structure
+Protected routes require:
 
-src/
-├─ controllers/     
-├─ middlewares/       
-├─ models/           
-├─ routes/             
-├─ validators/        
-├─ config/             
-├─ .env                
-├─ .env.example        
-├─ server.js           
+Authorization: Bearer <JWT>
+🗄️ SQL Schema
 
-        
+The repository includes a full SQL schema file:
 
-Running the Server
-npm install
-npm run dev
+sql/schema.sql
 
+It contains table creation scripts and foreign key relationships.
 
-Server runs at: http://localhost:4000
+⚙️ Design Decisions
 
-Test APIs via Postman using /api/... endpoints
+Key engineering decisions made in this project:
 
+1️⃣ Sequelize ORM used to simplify database interaction and maintain model relationships.
+
+2️⃣ JWT authentication implemented for stateless secure authentication.
+
+3️⃣ bcrypt password hashing used to securely store user credentials.
+
+4️⃣ Layered architecture separates routes, controllers, models, and middleware for maintainability.
+
+5️⃣ express-validator ensures input validation at the request layer.
+
+6️⃣ Role based middleware protects sensitive routes.
+
+🚀 Future Improvements
+
+Potential improvements for production deployment:
+
+Project member assignment
+
+File attachments for DPR reports
+
+API rate limiting
+
+Request logging
+
+Unit tests using Jest
+
+Docker containerization
+
+CI/CD pipeline integration
+
+Pagination and advanced filtering
+
+👨‍💻 Author
+
+Backend Developer Internship Submission
+
+Built with a focus on clean architecture, security, and maintainability.
