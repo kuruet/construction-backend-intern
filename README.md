@@ -174,9 +174,11 @@ Projects
 Daily Reports
 
 Database Relationships
+
 Users (1) ────── (Many) Projects
 Users (1) ────── (Many) Daily Reports
 Projects (1) ─── (Many) Daily Reports
+
 Relationship Explanation
 
 A user can create multiple projects
@@ -232,10 +234,12 @@ Daily Reports Table
 
 💻 Installation & Setup
 1️⃣ Clone Repository
-git clone https://github.com/yourusername/construction-management-backend.git
-cd construction-management-backend
+git clone https://github.com/kuruet/construction-backend-intern.git
+cd construction-backend-intern
+
 2️⃣ Install Dependencies
 npm install
+
 3️⃣ Setup MySQL Database
 
 Create database:
@@ -413,7 +417,9 @@ Code	Meaning
 403	Forbidden
 404	Not Found
 500	Server Error
+
 📁 Folder Structure
+
 src
  ├── config
  │    database.js
@@ -498,7 +504,8 @@ CI/CD pipeline integration
 
 Pagination and advanced filtering
 
-👨‍💻 Author
+
+
 
 Backend Developer Internship Submission
 
