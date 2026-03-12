@@ -7,7 +7,7 @@ The API powers core workflows such as:
 
 User authentication and authorization
 
-Project lifecycle management
+Project lifecycle management 
 
 Daily construction progress reporting
 

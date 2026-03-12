@@ -145,9 +145,9 @@
           }
         }
       ]
-    },
+    }, 
     {
-      "name": "DAILY REPORTS",
+      "name": "DAILY REPORTS", 
       "item": [
         {
           "name": "Create DPR (project-level)",

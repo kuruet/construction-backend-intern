@@ -38,7 +38,7 @@ CREATE INDEX idx_projects_status ON projects(status);
 
 -- =============================
 -- DAILY REPORTS TABLE
--- =============================
+-- ==============================
 CREATE TABLE daily_reports (
     id INT AUTO_INCREMENT PRIMARY KEY,
     project_id INT NOT NULL,
