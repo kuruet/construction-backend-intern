@@ -436,6 +436,7 @@ src
  ├── validators
  │
  └── server.js
+ 
 
 This structure follows separation of concerns and scalable backend architecture.
 
