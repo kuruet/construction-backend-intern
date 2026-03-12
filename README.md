@@ -308,16 +308,6 @@ admin
 manager
 worker
 
-
-Access Permissions
-
-Action	Admin	Manager	Worker
-Create Project	✅	✅	❌
-Update Project	✅	✅	❌
-Delete Project	✅	❌	❌
-Create DPR	✅	✅	✅
-View Projects	✅	✅	✅
-
 Role validation is implemented using authorization middleware.
 
 🚀 API Endpoints
