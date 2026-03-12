@@ -475,6 +475,23 @@ Key engineering decisions made in this project:
 
 6️⃣ Role based middleware protects sensitive routes.
 
+
+
+## 🎥 Video Walkthrough
+
+A detailed walkthrough of the backend implementation, including:
+
+- Database schema and relationships
+- Authentication flow (JWT)
+- Role-based access control
+- API endpoints demonstration using Postman
+- How to run and test the project locally
+
+**Video Link:**  
+https://drive.google.com/file/d/1krkDea5pBhMfFvVF0YeYskr_XYXRhagf/view
+
+
+
 🚀 Future Improvements
 
 Potential improvements for production deployment:
